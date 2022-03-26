@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, user-scalable=no,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0">
+    <title>게시판</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/bootstrap.min.css" />
+</head>
+<body>
+<div th:replace="/fragments/header.html :: fragment-header"></div>
+    <div class="inner">
+        <div class="board_title">
+            <p>정보 교환을 위한 커뮤니티입니다.</p>
+        </div>
+        <button type="button" class="write-box btn btn-success" style="margin-left: 10px">
+            <a href="/write">글쓰기</a>
+        </button>
+        <form class="write-box d-flex">
+            <input class="form-control me-sm-2" type="text" placeholder="Search">
+            <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+        </form>
+
+        <table class="table">
+            <thead class="thead-dark">
+            <tr>
+                <th scope="col">No</th>
+                <th scope="col">Title</th>
+                <th scope="col">Date</th>
+                <th scope="col">Hit</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="writer : ${boards}">
+                <td  th:text="${writer.id}"></td>
+                <td th:text="${writer.title}"></td>
+                <td th:text="${writer.updateDate}"></td>
+                <td th:text="${writer.hit}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="inner">
+        <div class="page-container">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination" style="justify-content: center">
+                    <li class="page-item text-muted" th:classappend="${1 == boards.pageable.pageNumber +1} ? 'disabled'">
+                        <a class="page-link" href="#" th:href="@{/board(page=${0})}"><<</a>
+                    </li>
+                    <li class="page-item text-black" th:classappend="${1 == boards.pageable.pageNumber +1} ? 'disabled '">
+                        <a class="page-link" href="#" th:href="@{/board(page=${boards.pageable.getPageNumber()-1})}"><</a>
+                    </li>
+                    <li class="page-item text-black" th:classappend="${i == boards.pageable.pageNumber +1} ? 'disabled'" th:each="i : ${#numbers.sequence(startPage,endPage)}">
+                        <a class="page-link" href="#" th:href="@{/board(page=${i -1})}" th:text="${i}">1</a>
+                    </li>
+                    <li class="page-item text-black" th:classappend="${boards.totalPages == boards.pageable.pageNumber +1} ? 'disabled'">
+                        <a class="page-link" href="#" th:href="@{/board(page=${boards.pageable.getPageNumber()+1})}">></a>
+                    </li>
+                    <li class="page-item text-black" th:classappend="${boards.totalPages == boards.pageable.pageNumber +1} ? 'disabled'">
+                        <a class="page-link" href="#" th:href="@{/board(page=${boards.totalPages - 1})}">>></a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <div class="card-header bg-light">
+        <i class="fa fa-comment fa"></i> REPLY
+    </div>
+    <div class="card-body">
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+                <div class="form-inline mb-2">
+                    <label for="replyId"><i class="fa fa-user-circle-o fa-2x"></i></label>
+                    <input type="text" class="form-control ml-2" placeholder="Enter yourId" id="replyId">
+                    <label for="replyPassword" class="ml-4"><i class="fa fa-unlock-alt fa-2x"></i></label>
+                    <input type="password" class="form-control ml-2" placeholder="Enter password" id="replyPassword">
+                </div>
+                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                <button type="button" class="btn btn-dark mt-3" onClick="javascript:addReply();">post reply</button>
+            </li>
+        </ul>
+    </div>
+    </div>
+</body>
+<div th:replace="/fragments/footer.html :: fragment-footer"></div>
+</html>

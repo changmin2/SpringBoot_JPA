@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/bootstrap.min.css" />
+    <title>배추도사 무도사</title>
+</head>
+<body>
+<div th:replace="/fragments/header.html :: fragment-header"></div>
+    <section class="price" id="price">
+        <div class="inner">
+            <div class="price-container">
+                <div class="price-title">가격예측</div>
+                <ul class="class-list">
+                    <li class="class-card">
+                        <div class="class-container">
+                            <div class="class-skill">
+                                <div class="class-type">어제의 가격</div>
+                            </div>
+                            <div class="class-desc">
+                                <div class="class-detail">배추: 1000원</div>
+                                <div class="class-detail">무: 1000원</div>
+                            </div>
+                        </div>
+                        </a>
+                    </li>
+                    <li class="class-card">
+                        <div class="class-container">
+                            <div class="class-skill">
+                                <div class="class-type">오늘의 가격</div>
+                            </div>
+                            <div class="class-desc">
+                                <div class="class-detail">배추: 1100원</div>
+                                <div class="class-detail">무: 1100원</div>
+                            </div>
+                        </div>
+                        </a>
+                    </li>
+                    <li class="class-card">
+                        <div class="class-container">
+                            <div class="class-skill">
+                                <div class="class-type">내일의 가격</div>
+                            </div>
+                            <div class="class-desc">
+                                <div class="class-detail">배추: 1200원</div>
+                                <div class="class-detail">무: 1200원</div>
+                            </div>
+                        </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+    <section class="weather" id="weather">
+        <div class="inner">
+            <div class="weather-container">
+                <div class="weather-title">오늘 날씨</div>
+                <div class="weather-message">
+                    <div class="post-entry-1">
+                        <img src="/static/img/weather/sunny.png" alt="Image" class="img-fluid">
+
+                        <h2>현재 서울 날씨</h2>
+                        맑음
+
+                        기온 : 23<br>
+                        최저 기온 : 13<br>
+                        최고 기온 : 22<br>
+                        체감 온도 : 10<br>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+<div th:replace="/fragments/footer.html :: fragment-footer"></div>
+</html>
