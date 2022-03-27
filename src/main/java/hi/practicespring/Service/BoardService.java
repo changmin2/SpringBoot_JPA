@@ -19,19 +19,14 @@ public class BoardService {
     private BoardRepository boardRepository;
 
     @Transactional
-    public void join(){
-        for(int i=0;i<50;i++){
-            Board board = new Board();
-            board.setTitle("테스트 제목 " + i);
-            board.setContent("테스트 내용"+i);
-            board.setUpdateDate(LocalDate.now());
-            board.setHit(i);
-            boardRepository.save(board);
-        }
+    public void join(Board board){
+        boardRepository.save(board);
     }
     public Page<Board> allFind(Pageable pageable){
         return boardRepository.findAll(pageable);
 
     }
-
+    public Board FidById(Long pageId){
+        return boardRepository.getById(pageId);
+    }
 }

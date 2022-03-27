@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>상세페이지</title>
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/css/bootstrap.min.css" />
+</head>
+<body>
+<div th:replace="/fragments/header.html :: fragment-header"></div>
+<div class="board_wrap">
+  <div class="board_view_wrap">
+    <div class="board_view">
+      <div class="title">
+         <span th:text="${board.title}"></span>
+      </div>
+      <div class="info">
+        <dl>
+          <dt>No</dt>
+          <dd th:text="${board.id}"></dd>
+        </dl>
+        <dl>
+          <dt>글쓴이</dt>
+          <dd>익명</dd>
+        </dl>
+        <dl>
+          <dt>작성일</dt>
+          <dd th:text="${board.updateDate}"></dd>
+        </dl>
+        <dl>
+          <dt>조회</dt>
+          <dd th:text="${board.hit}"></dd>
+        </dl>
+      </div>
+      <div class="cont">
+        <div th:text="${board.content}">
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="write_update_delete">
+    <form role="form" th:action="@{/update}"  method="get" style="margin-right: 5px">
+      <button type="submit" class="btn btn-secondary mb-3">수정</button>
+    </form>
+    <form role="form" th:action="@{/delete}"  method="get" style="margin-right: 5px">
+      <button type="submit" class="btn btn-secondary mb-3">삭제</button>
+    </form>
+    <a th:href="@{/board}">
+      <button type="submit" class="btn btn-secondary mb-3">목록</button>
+    </a>
+
+  </div>
+</div>
+<div class="inner">
+  <div class="card mb-2">
+  <div class="card-header bg-light">
+    <i class="fa fa-comment fa"></i> REPLY
+  </div>
+    <div class="card-body">
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+          <div class="form-inline mb-2">
+            <label for="replyId"><i class="fa fa-user-circle-o fa-2x"></i></label>
+            <input type="text" class="form-control ml-2" placeholder="Enter yourId" id="replyId">
+            <label for="replyPassword" class="ml-4"><i class="fa fa-unlock-alt fa-2x"></i></label>
+            <input type="password" class="form-control ml-2" placeholder="Enter password" id="replyPassword">
+          </div>
+          <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+          <button type="button" class="btn btn-dark mt-3" onClick="javascript:addReply();">post reply</button>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div class="inner">
+  <div class="card mb-2">
+  <div class="card-header bg-light">
+    <i class="fa fa-comment fa"></i> 댓글창
+  </div>
+  <div class="card-body">
+
+  </div>
+</div>
+</div>
+<div th:replace="/fragments/footer.html :: fragment-footer"></div>
+</body>
+</html>

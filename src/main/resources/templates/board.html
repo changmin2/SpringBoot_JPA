@@ -33,8 +33,12 @@
             </thead>
             <tbody>
             <tr th:each="writer : ${boards}">
-                <td  th:text="${writer.id}"></td>
-                <td th:text="${writer.title}"></td>
+                <td   th:text="${writer.id}"></td>
+                <td>
+                    <a th:href="@{/detail(pageid=${writer.id})}">
+                        <span th:text="${writer.title}"></span>
+                    </a>
+                </td>
                 <td th:text="${writer.updateDate}"></td>
                 <td th:text="${writer.hit}"></td>
             </tr>
@@ -65,24 +69,7 @@
         </div>
     </div>
 
-    <div class="card-header bg-light">
-        <i class="fa fa-comment fa"></i> REPLY
-    </div>
-    <div class="card-body">
-        <ul class="list-group list-group-flush">
-            <li class="list-group-item">
-                <div class="form-inline mb-2">
-                    <label for="replyId"><i class="fa fa-user-circle-o fa-2x"></i></label>
-                    <input type="text" class="form-control ml-2" placeholder="Enter yourId" id="replyId">
-                    <label for="replyPassword" class="ml-4"><i class="fa fa-unlock-alt fa-2x"></i></label>
-                    <input type="password" class="form-control ml-2" placeholder="Enter password" id="replyPassword">
-                </div>
-                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-                <button type="button" class="btn btn-dark mt-3" onClick="javascript:addReply();">post reply</button>
-            </li>
-        </ul>
-    </div>
-    </div>
+
 </body>
 <div th:replace="/fragments/footer.html :: fragment-footer"></div>
 </html>
