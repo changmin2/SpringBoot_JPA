@@ -1,10 +1,12 @@
 <!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>상세페이지</title>
   <link rel="stylesheet" href="/css/style.css" />
   <link rel="stylesheet" href="/css/bootstrap.min.css" />
+  <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
 </head>
 <body>
 <div th:replace="/fragments/header.html :: fragment-header"></div>
@@ -39,16 +41,15 @@
     </div>
   </div>
   <div class="write_update_delete">
-    <form role="form" th:action="@{/update}"  method="get" style="margin-right: 5px">
-      <button type="submit" class="btn btn-secondary mb-3">수정</button>
-    </form>
-    <form role="form" th:action="@{/delete}"  method="get" style="margin-right: 5px">
-      <button type="submit" class="btn btn-secondary mb-3">삭제</button>
-    </form>
-    <a th:href="@{/board}">
-      <button type="submit" class="btn btn-secondary mb-3">목록</button>
-    </a>
-
+      <a th:href="@{/update(pageid=${board.id})}" style="margin-right: 5px">
+        <button type="submit" class="btn btn-secondary mb-3" >수정</button>
+      </a>
+      <a th:href="@{/delete(pageid=${board.id})}" style="margin-right: 5px">
+        <button type="submit" class="btn btn-secondary mb-3" >삭제</button>
+      </a>
+      <a th:href="@{/board}">
+        <button type="submit" class="btn btn-secondary mb-3">목록</button>
+      </a>
   </div>
 </div>
 <div class="inner">
@@ -56,20 +57,22 @@
   <div class="card-header bg-light">
     <i class="fa fa-comment fa"></i> REPLY
   </div>
-    <div class="card-body">
-      <ul class="list-group list-group-flush">
-        <li class="list-group-item">
-          <div class="form-inline mb-2">
-            <label for="replyId"><i class="fa fa-user-circle-o fa-2x"></i></label>
-            <input type="text" class="form-control ml-2" placeholder="Enter yourId" id="replyId">
-            <label for="replyPassword" class="ml-4"><i class="fa fa-unlock-alt fa-2x"></i></label>
-            <input type="password" class="form-control ml-2" placeholder="Enter password" id="replyPassword">
-          </div>
-          <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-          <button type="button" class="btn btn-dark mt-3" onClick="javascript:addReply();">post reply</button>
-        </li>
-      </ul>
-    </div>
+    <form role="form" th:action="@{/comment(pageid=${board.id})}"  th:object="${CommentForm}" id="CommentForm" method="post">
+      <div class="card-body">
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">
+            <div class="form-inline mb-2">
+              <label for="replyId"><i class="fa fa-user-circle-o fa-2x"></i></label>
+              <input type="text" class="form-control ml-2" placeholder="Enter yourId" th:value="replyId" name="replyId" id="replyId">
+              <label for="replyPassword" class="ml-4"><i class="fa fa-unlock-alt fa-2x"></i></label>
+              <input type="password" class="form-control ml-2" th:value="replyPassword" placeholder="Enter password" name="replyPassword" id="replyPassword">
+            </div>
+            <textarea class="form-control" th:value="replyContent" name="replyContent"  id="replyContent" rows="3"></textarea>
+            <button type="submit" class="btn btn-dark mt-3">post reply</button>
+          </li>
+        </ul>
+      </div>
+    </form>
   </div>
 </div>
 <div class="inner">
@@ -77,11 +80,91 @@
   <div class="card-header bg-light">
     <i class="fa fa-comment fa"></i> 댓글창
   </div>
-  <div class="card-body">
-
+    <div th:each="comment : ${comments}">
+      <div class="card-body" id="replyply">
+        <div class="replay-container">
+          <div class="replay-sub-container">
+            <div class="replay-id"  th:text="${comment.commentid}">
+            </div>
+            <div>
+              <button type="button" class="btn btn-secondary" th:onclick="|javascript:changePopup('${comment.id}')|" >답글</button>
+              <button type="button" class="btn btn-danger">삭제</button>
+            </div>
+          </div>
+          <div class="replay-content" th:text="${comment.content}">
+          </div>
+          <div class="replay-sub-container">
+            <div class="replay-date" th:text="${comment.updateDate}">
+              2022-02-02
+            </div>
+            <div >
+              hi
+            </div>
+          </div>
+        </div>
+      </div>
+      <div th:each="subcomment : ${comment.getChildren()}">
+        <div class="reply-main-container">
+          <div class="reply-shift-container">
+            <div class="reply-shift-arrow">
+              <span class="badge rounded-pill bg-light text-dark">대댓글</span>
+            </div>
+          </div>
+          <div class="subreplay-container">
+            <div class="replay-sub-container">
+              <div class="replay-id" th:text="${subcomment.content}">
+                hi
+              </div>
+              <div>
+                <button type="button" class="btn btn-danger">삭제</button>
+              </div>
+            </div>
+            <div class="replay-content">
+              comment
+            </div>
+            <div class="replay-sub-container">
+              <div class="replay-date" >
+                2022-02-02
+              </div>
+              <div>
+                hi
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-</div>
 </div>
 <div th:replace="/fragments/footer.html :: fragment-footer"></div>
 </body>
+<script type="text/javascript">
+  function changePopup(idx)
+  {
+    console.log("보이루");
+    var id = prompt("댓글작성자 아이디","");
+    var password = prompt("댓글작성자 비밀번호","");
+    var content = prompt("댓글내용","");
+    var param = {"commentid":id, "commentpassword":password,"content":content};
+    $.ajax({ // 컨트롤러와 통신
+      type: "POST",
+      data:JSON.stringify(param),
+      url: "/replycomment",
+      dataType:"text",
+      contentType: "application/json; charset=UTF-8",
+      success: function(result) {
+        if (result=="sucess") {
+          alert("완료");
+        } else {
+          alert("전송된 값 없음");
+        }
+      },
+      error: function(jqXHR, textStatus, errorThrown) {
+        alert("ERROR : " + textStatus + " : " + errorThrown);
+      }
+    });
+  }
+</script>
+
+
 </html>

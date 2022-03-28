@@ -8,6 +8,7 @@ import lombok.ToString;
 @Setter
 @ToString
 public class WriteForm {
+    String id;
     String title;
     String content;
 }

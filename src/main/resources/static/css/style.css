@@ -230,6 +230,51 @@ img{
     justify-content: right;
     margin-top: 5px;
 }
+.replay-container {
+    height: 100px;
+    border-bottom: 2px solid;
+    margin-bottom: 30px;
+}
+.replay-sub-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.replay-id {
+    font-size: 1.5rem;
+}
+.replay-content {
+    margin-top: 5px;
+    font-size: 1.2rem;
+}
+.replay-date{
+    margin-top:5px;
+    display: flex;
+    justify-content: space-between;
+    font-size:0.8rem;
+    opacity: 0.8;
+}
+.reply-main-container{
+    display: flex;
+    justify-content: space-between;
+}
+.subreplay-container{
+    width: 60%;
+    height: 80%;
+    border-bottom: 2px solid;
+    margin-bottom: 30px;
+    margin-right: 200px;
+}
+.reply-shift-container{
+    width: 160px;
+    display: flex;
+    justify-content: right;
+
+}
+.reply-shift-arrow{
+    width: 20%;
+}
+
 @media only screen and (min-width: 1200px) {
     .inner {
         max-width: 1200px;

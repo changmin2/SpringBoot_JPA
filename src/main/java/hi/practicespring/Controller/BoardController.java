@@ -1,8 +1,11 @@
 package hi.practicespring.Controller;
 
 import hi.practicespring.Domain.Board;
+import hi.practicespring.Domain.Comment;
+import hi.practicespring.Domain.Form.CommentForm;
 import hi.practicespring.Domain.Form.WriteForm;
 import hi.practicespring.Service.BoardService;
+import hi.practicespring.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,13 +13,11 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
+
 
 @Controller
 @RequiredArgsConstructor
@@ -48,7 +49,7 @@ public class BoardController {
     }
 
     @PostMapping("/write")
-    public String Registerwrite(WriteForm writeForm, Model model){
+    public String write(WriteForm writeForm, Model model){
         Board board = new Board();
         board.setUpdateDate(LocalDate.now());
         board.setTitle(writeForm.getTitle());
@@ -61,8 +62,41 @@ public class BoardController {
     @RequestMapping("/detail")
     public String detail(@RequestParam("pageid") String pageId, Model model){
         Board findBoard = boardService.FidById(Long.parseLong(pageId));
+        List<Comment> commnets = findBoard.getCommnets();
+        model.addAttribute("comments",commnets);
         model.addAttribute("board",findBoard);
         return "detail";
     }
 
+    @RequestMapping("/delete")
+    public String delete(@RequestParam("pageid") String pageId, Model model){
+        boardService.delete(Long.parseLong(pageId));
+        return "redirect:/board";
+    }
+
+    @RequestMapping("/update")
+    public String update(@RequestParam("pageid") String pageId, Model model){
+        Board board = boardService.FidById(Long.parseLong(pageId));
+        model.addAttribute("board",board);
+        return "update";
+    }
+
+    @PostMapping("/update")
+    public String update(WriteForm writeForm, Model model){
+        boardService.update(writeForm);
+        return  "redirect:/board";
+    }
+
+    @PostMapping("/comment")
+    public String comment(@RequestParam("pageid") String pageId, CommentForm commentForm, Model model){
+        System.out.println("BoardController.comment"+commentForm.getReplyContent());
+        boardService.setComment(commentForm,Long.parseLong(pageId));
+        return  "redirect:/detail?pageid="+pageId;
+    }
+
+    @PostMapping("/replycomment")
+    @ResponseBody
+    public String replycomment(@RequestBody CommentForm param){
+        return  "success";
+    }
 }
