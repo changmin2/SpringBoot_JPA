@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 
 @Controller
@@ -88,15 +89,32 @@ public class BoardController {
     }
 
     @PostMapping("/comment")
-    public String comment(@RequestParam("pageid") String pageId, CommentForm commentForm, Model model){
-        System.out.println("BoardController.comment"+commentForm.getReplyContent());
-        boardService.setComment(commentForm,Long.parseLong(pageId));
-        return  "redirect:/detail?pageid="+pageId;
+    @ResponseBody
+    public String comment(@RequestBody Map<String,String> map){
+        CommentForm commentForm = new CommentForm();
+        String boardid = map.get("boardid");
+        String commentid = map.get("commentid");
+        String commentpassword =  map.get("commentpassword");
+        String content = map.get("content");
+        commentForm.setReplyId(commentid);
+        commentForm.setReplyPassword(commentpassword);
+        commentForm.setReplyContent(content);
+        boardService.setComment(commentForm,Long.parseLong(boardid));
+        return  "success";
     }
 
     @PostMapping("/replycomment")
     @ResponseBody
-    public String replycomment(@RequestBody CommentForm param){
+    public String replycomment(@RequestBody Map<String,String> map){
+        CommentForm commentForm = new CommentForm();
+        String parentid = map.get("id");
+        String commentid = map.get("commentid");
+        String commentpassword =  map.get("commentpassword");
+        String content = map.get("content");
+        commentForm.setReplyId(commentid);
+        commentForm.setReplyPassword(commentpassword);
+        commentForm.setReplyContent(content);
+        boardService.setReplyComment(Long.parseLong(parentid),commentForm);
         return  "success";
     }
 }

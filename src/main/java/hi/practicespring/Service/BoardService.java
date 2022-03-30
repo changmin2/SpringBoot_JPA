@@ -58,6 +58,16 @@ public class BoardService {
         comment.setUpdateDate(LocalDate.now());
         commentRepository.save(comment);
         findBoard.getCommnets().add(comment);
-
+    }
+    @Transactional
+    public void setReplyComment(Long parentid,CommentForm commentForm){
+        Comment findComment = commentRepository.getById(parentid);
+        Comment childComment = new Comment();
+        childComment.setParent(findComment);
+        childComment.setCommentpassword(commentForm.getReplyPassword());
+        childComment.setCommentid(commentForm.getReplyId());
+        childComment.setContent(commentForm.getReplyContent());
+        findComment.getChildren().add(childComment);
+        commentRepository.save(childComment);
     }
 }

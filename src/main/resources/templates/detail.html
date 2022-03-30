@@ -57,7 +57,7 @@
   <div class="card-header bg-light">
     <i class="fa fa-comment fa"></i> REPLY
   </div>
-    <form role="form" th:action="@{/comment(pageid=${board.id})}"  th:object="${CommentForm}" id="CommentForm" method="post">
+<!--    <form role="form" th:action="@{/comment(pageid=${board.id})}"  th:object="${CommentForm}" id="CommentForm" method="post">-->
       <div class="card-body">
         <ul class="list-group list-group-flush">
           <li class="list-group-item">
@@ -68,11 +68,11 @@
               <input type="password" class="form-control ml-2" th:value="replyPassword" placeholder="Enter password" name="replyPassword" id="replyPassword">
             </div>
             <textarea class="form-control" th:value="replyContent" name="replyContent"  id="replyContent" rows="3"></textarea>
-            <button type="submit" class="btn btn-dark mt-3">post reply</button>
+            <button type="submit" class="btn btn-dark mt-3" th:onclick="|javascript:registerComment('${board.id}')|" >post reply</button>
           </li>
         </ul>
       </div>
-    </form>
+<!--    </form>-->
   </div>
 </div>
 <div class="inner">
@@ -87,7 +87,7 @@
             <div class="replay-id"  th:text="${comment.commentid}">
             </div>
             <div>
-              <button type="button" class="btn btn-secondary" th:onclick="|javascript:changePopup('${comment.id}')|" >답글</button>
+              <button type="button" class="btn btn-secondary" th:onclick="|javascript:registerReply('${comment.id}')|" >답글</button>
               <button type="button" class="btn btn-danger">삭제</button>
             </div>
           </div>
@@ -95,7 +95,6 @@
           </div>
           <div class="replay-sub-container">
             <div class="replay-date" th:text="${comment.updateDate}">
-              2022-02-02
             </div>
             <div >
               hi
@@ -112,22 +111,18 @@
           </div>
           <div class="subreplay-container">
             <div class="replay-sub-container">
-              <div class="replay-id" th:text="${subcomment.content}">
-                hi
+              <div class="replay-id" th:text="${subcomment.commentid}">
+                내용없음
               </div>
               <div>
                 <button type="button" class="btn btn-danger">삭제</button>
               </div>
             </div>
-            <div class="replay-content">
+            <div class="replay-content" th:text="${subcomment.content}">
               comment
             </div>
             <div class="replay-sub-container">
-              <div class="replay-date" >
-                2022-02-02
-              </div>
-              <div>
-                hi
+              <div class="replay-date" th:text="${subcomment.updateDate}">
               </div>
             </div>
           </div>
@@ -139,24 +134,48 @@
 <div th:replace="/fragments/footer.html :: fragment-footer"></div>
 </body>
 <script type="text/javascript">
-  function changePopup(idx)
+  function registerComment(boardid)
+  {
+      var commentId = document.getElementById("replyId").value;
+      var commentPassword = document.getElementById("replyPassword").value;
+      var commentContent = document.getElementById("replyContent").value;
+      var CommentForm = {"boardid":boardid,"commentid":commentId, "commentpassword":commentPassword,"content":commentContent};
+    $.ajax({ // 컨트롤러와 통신
+      type: "POST",
+      data:JSON.stringify(CommentForm),
+      url: "/comment",
+      dataType:"text",
+      contentType: "application/json; charset=UTF-8",
+      success: function(result) {
+        if (result=="success") {
+          location.reload();
+        } else {
+          alert("댓글 등록 실패");
+        }
+      },
+      error: function(jqXHR, textStatus, errorThrown) {
+        alert("ERROR : " + textStatus + " : " + errorThrown);
+      }
+    });
+  }
+  function registerReply(idx)
   {
     console.log("보이루");
     var id = prompt("댓글작성자 아이디","");
     var password = prompt("댓글작성자 비밀번호","");
     var content = prompt("댓글내용","");
-    var param = {"commentid":id, "commentpassword":password,"content":content};
+    var CommentForm = {"id":idx,"commentid":id, "commentpassword":password,"content":content};
     $.ajax({ // 컨트롤러와 통신
       type: "POST",
-      data:JSON.stringify(param),
+      data:JSON.stringify(CommentForm),
       url: "/replycomment",
       dataType:"text",
       contentType: "application/json; charset=UTF-8",
       success: function(result) {
-        if (result=="sucess") {
-          alert("완료");
+        if (result=="success") {
+          location.reload();
         } else {
-          alert("전송된 값 없음");
+          alert("댓글 등록 실패");
         }
       },
       error: function(jqXHR, textStatus, errorThrown) {
