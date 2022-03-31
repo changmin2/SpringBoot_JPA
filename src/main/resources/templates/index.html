@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -77,6 +78,49 @@
             </div>
         </div>
     </section>
+<section class="policyNews" id="policyNews">
+    <div class="inner">
+        <div class="policyNews-container">
+            <div class="policy">
+                <div class="policy-title" >정책</div>
+                <ul class="pn-desc">
+                    <li class="pn-detail">
+                        <h2><a th:href="@{${'https://www.nongmin.com/'+policy[5]}}"  th:text="${policy[0]}"></a></h2>
+                    </li>
+                    <li class="pn-detail">
+                        <h2><a th:href="@{${'https://www.nongmin.com/'+policy[6]}}"  th:text="${policy[1]}"></a></h2>
+                    </li>
+                    <li class="pn-detail">
+                        <h2><a th:href="@{${'https://www.nongmin.com/'+policy[7]}}"  th:text="${policy[2]}"></a></h2>
+                    </li>
+                    <li class="pn-detail">
+                        <h2><a th:href="@{${'https://www.nongmin.com/'+policy[8]}}"  th:text="${policy[3]}">></a></h2>
+                    </li>
+                    <li class="pn-detail">
+                        <h2><a th:href="@{${'https://www.nongmin.com/'+policy[9]}}"  th:text="${policy[4]}">></a></h2>
+                    </li>
+                </ul>
+            </div>
+            <div class="news">
+                <div class="news-title">뉴스</div>
+                <ul class="pn-desc">
+                    <li class="pn-detail">
+                        <h2><a href="http://www.ikpnews.net/{{href_list[0]}}">테스트1</a></h2>
+                    </li>
+                    <li class="pn-detail">
+                        <h2><a href="http://www.ikpnews.net/{{href_list[1]}}">테스트1</a></h2>
+                    </li>
+                    <li class="pn-detail">
+                        <h2><a href="http://www.ikpnews.net/{{href_list[2]}}">테스트1</a></h2>
+                    </li>
+                    <li class="pn-detail">
+                        <h2><a href="http://www.ikpnews.net/{{href_list[3]}}">테스트1</a></h2>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
 </body>
 <div th:replace="/fragments/footer.html :: fragment-footer"></div>
 </html>

@@ -1,12 +1,15 @@
 package hi.practicespring.Controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import hi.practicespring.Domain.Board;
 import hi.practicespring.Domain.Comment;
 import hi.practicespring.Domain.Form.CommentForm;
+import hi.practicespring.Domain.Form.PolicyForm;
 import hi.practicespring.Domain.Form.WriteForm;
 import hi.practicespring.Service.BoardService;
 import hi.practicespring.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
+import org.apache.tomcat.util.json.JSONParser;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -15,6 +18,12 @@ import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +37,35 @@ public class BoardController {
 
     @RequestMapping("/")
     public String atHome(Model model){
+
+        String url="http://127.0.0.1:5000/moa/policy_api";
+        String sb="";
+        try{
+            HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));
+
+            String line = null;
+
+            while ((line = br.readLine()) != null) {
+                sb = sb + line + "\n";
+            }
+            System.out.println(sb);
+            br.close();
+
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        sb = sb.replace("[","");
+        sb = sb.replace("]","");
+        sb = sb.replace("\"","");
+        sb = sb.replace(", ","·");
+        String [] array = sb.split(",");
+        System.out.println(array[5]);
+        model.addAttribute("policy",array);
         return "index";
     }
 
