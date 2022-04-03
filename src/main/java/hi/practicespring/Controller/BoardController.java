@@ -64,7 +64,6 @@ public class BoardController {
         sb = sb.replace("\"","");
         sb = sb.replace(", ","·");
         String [] array = sb.split(",");
-        System.out.println(array[5]);
         model.addAttribute("policy",array);
         return "index";
     }
