@@ -8,14 +8,13 @@ import hi.practicespring.repository.BoardRepository;
 import hi.practicespring.repository.CommentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Service
 public class BoardService {
@@ -28,12 +27,23 @@ public class BoardService {
     public void join(Board board){
         boardRepository.save(board);
     }
+    public Page<Board> searchFind(String keyword,Pageable pageable){
+        return boardRepository.findByTitleContaining(keyword,pageable);
+    }
     public Page<Board> allFind(Pageable pageable){
         return boardRepository.findAll(pageable);
-
     }
+
     public Board FidById(Long pageId){
         return boardRepository.getById(pageId);
+    }
+    @Transactional
+    public void increaseHit(Long pageId){
+
+        Board findBoard = boardRepository.getById(pageId);
+        int hit = findBoard.getHit();
+        findBoard.setHit(hit+1);
+
     }
 
     public void delete(Long pageId){
@@ -45,7 +55,8 @@ public class BoardService {
         Board findBoard = boardRepository.getById(Long.parseLong(writeForm.getId()));
         findBoard.setTitle(writeForm.getTitle());
         findBoard.setContent(writeForm.getContent());
-        findBoard.setUpdateDate(LocalDate.now());
+        findBoard.setUpdateDate(LocalDateTime.now()
+                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
     }
     @Transactional
     public void setComment(CommentForm commnetForm, Long pageid){
@@ -69,5 +80,17 @@ public class BoardService {
         childComment.setContent(commentForm.getReplyContent());
         findComment.getChildren().add(childComment);
         commentRepository.save(childComment);
+    }
+    @Transactional
+    public String deleteComment(Long commentId,String password){
+        Comment findComment = commentRepository.getById(commentId);
+        if(findComment.getCommentpassword().equals(password)){
+            commentRepository.delete(findComment);
+            return "success";
+        }
+        else{
+            return "fail";
+        }
+
     }
 }

@@ -50,19 +50,19 @@
             <nav aria-label="Page navigation example">
                 <ul class="pagination" style="justify-content: center">
                     <li class="page-item text-muted" th:classappend="${1 == boards.pageable.pageNumber +1} ? 'disabled'">
-                        <a class="page-link" href="#" th:href="@{/board(page=${0})}"><<</a>
+                        <a class="page-link" href="#" th:href="@{/search(keyword=${keyword},page=${0})}"><<</a>
                     </li>
                     <li class="page-item text-black" th:classappend="${1 == boards.pageable.pageNumber +1} ? 'disabled '">
-                        <a class="page-link" href="#" th:href="@{/board(page=${boards.pageable.getPageNumber()-1})}"><</a>
+                        <a class="page-link" href="#" th:href="@{/search(keyword=${keyword},page=${boards.pageable.getPageNumber()-1})}"><</a>
                     </li>
                     <li class="page-item text-black" th:classappend="${i == boards.pageable.pageNumber +1} ? 'disabled'" th:each="i : ${#numbers.sequence(startPage,endPage)}">
-                        <a class="page-link" href="#" th:href="@{/board(page=${i -1})}" th:text="${i}">1</a>
+                        <a class="page-link" href="#" th:href="@{/search(keyword=${keyword},page=${i -1})}" th:text="${i}">1</a>
                     </li>
                     <li class="page-item text-black" th:classappend="${boards.totalPages == boards.pageable.pageNumber +1} ? 'disabled'">
-                        <a class="page-link" href="#" th:href="@{/board(page=${boards.pageable.getPageNumber()+1})}">></a>
+                        <a class="page-link" href="#" th:href="@{/search(keyword=${keyword},page=${boards.pageable.getPageNumber()+1})}">></a>
                     </li>
                     <li class="page-item text-black" th:classappend="${boards.totalPages == boards.pageable.pageNumber +1} ? 'disabled'">
-                        <a class="page-link" href="#" th:href="@{/board(page=${boards.totalPages - 1})}">>></a>
+                        <a class="page-link" href="#" th:href="@{/search(keyword=${keyword},page=${boards.totalPages - 1})}">>></a>
                     </li>
                 </ul>
             </nav>

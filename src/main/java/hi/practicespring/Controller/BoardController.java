@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.json.JSONParser;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,8 +26,11 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 
 @Controller
@@ -69,7 +73,7 @@ public class BoardController {
     }
 
     @RequestMapping("/board")
-    public String home(Model model,@PageableDefault(size = 10) Pageable pageable){
+    public String home(Model model,@PageableDefault(sort = "id",direction = Sort.Direction.DESC,size = 10) Pageable pageable){
         Page boards = boardService.allFind(pageable);
         int startPage = Math.max(1,boards.getPageable().getPageNumber()-1);
         int endPage = Math.min(boards.getTotalPages(),boards.getPageable().getPageNumber()+2);
@@ -81,6 +85,20 @@ public class BoardController {
         model.addAttribute("boards",boards);
         return "board";
     }
+    @GetMapping("/search")
+    public String search(@RequestParam(value="keyword") String keyword,Model model,@PageableDefault(sort = "id",direction = Sort.Direction.DESC,size = 10) Pageable pageable){
+        Page boards = boardService.searchFind(keyword,pageable);
+        int startPage = Math.max(1,boards.getPageable().getPageNumber()-1);
+        int endPage = Math.min(boards.getTotalPages(),boards.getPageable().getPageNumber()+2);
+        while(endPage-startPage <4 && endPage!=boards.getTotalPages()){
+            endPage+=1;
+        }
+        model.addAttribute("keyword",keyword);
+        model.addAttribute("startPage",startPage);
+        model.addAttribute("endPage",endPage);
+        model.addAttribute("boards",boards);
+        return "searchBoard";
+    }
     @GetMapping("/write")
     public String write(Model model){
         return "write";
@@ -89,7 +107,8 @@ public class BoardController {
     @PostMapping("/write")
     public String write(WriteForm writeForm, Model model){
         Board board = new Board();
-        board.setUpdateDate(LocalDate.now());
+        board.setUpdateDate(LocalDateTime.now()
+                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
         board.setTitle(writeForm.getTitle());
         board.setContent(writeForm.getContent());
         board.setHit(0);
@@ -99,6 +118,7 @@ public class BoardController {
 
     @RequestMapping("/detail")
     public String detail(@RequestParam("pageid") String pageId, Model model){
+        boardService.increaseHit(Long.parseLong(pageId));
         Board findBoard = boardService.FidById(Long.parseLong(pageId));
         List<Comment> commnets = findBoard.getCommnets();
         model.addAttribute("comments",commnets);
@@ -153,5 +173,14 @@ public class BoardController {
         commentForm.setReplyContent(content);
         boardService.setReplyComment(Long.parseLong(parentid),commentForm);
         return  "success";
+    }
+
+    @PostMapping("/deletecomment")
+    @ResponseBody
+    public String deletecomment(@RequestBody Map<String,String> map){
+        String commentId = map.get("id");
+        String commentpassword =  map.get("commentpassword");
+        String result = boardService.deleteComment(Long.parseLong(commentId), commentpassword);
+        return  result;
     }
 }

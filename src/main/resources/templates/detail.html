@@ -88,7 +88,7 @@
             </div>
             <div>
               <button type="button" class="btn btn-secondary" th:onclick="|javascript:registerReply('${comment.id}')|" >답글</button>
-              <button type="button" class="btn btn-danger">삭제</button>
+              <button type="button" class="btn btn-danger" th:onclick="|javascript:deleteReply('${comment.id}')|">삭제</button>
             </div>
           </div>
           <div class="replay-content" th:text="${comment.content}">
@@ -115,7 +115,7 @@
                 내용없음
               </div>
               <div>
-                <button type="button" class="btn btn-danger">삭제</button>
+                <button type="button" class="btn btn-danger" th:onclick="|javascript:deleteReply('${subcomment.id}')|">삭제</button>
               </div>
             </div>
             <div class="replay-content" th:text="${subcomment.content}">
@@ -183,6 +183,30 @@
       }
     });
   }
+  function deleteReply(idx)
+  {
+    var password = prompt("댓글작성자 비밀번호","");
+    var CommentForm = {"id":idx,"commentpassword":password};
+    $.ajax({ // 컨트롤러와 통신
+      type: "POST",
+      data:JSON.stringify(CommentForm),
+      url: "/deletecomment",
+      dataType:"text",
+      contentType: "application/json; charset=UTF-8",
+      success: function(result) {
+        if (result=="success") {
+          location.reload();
+        } else {
+          alert("비밀 번호가 맞지 않습니다!!");
+        }
+      },
+      error: function(jqXHR, textStatus, errorThrown) {
+        alert("ERROR : " + textStatus + " : " + errorThrown);
+      }
+    });
+  }
+
+
 </script>
 
 
