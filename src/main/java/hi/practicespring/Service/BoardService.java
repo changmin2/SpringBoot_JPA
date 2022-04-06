@@ -61,6 +61,8 @@ public class BoardService {
     @Transactional
     public void setComment(CommentForm commnetForm, Long pageid){
         Board findBoard = boardRepository.getById(pageid);
+        int countcomment = findBoard.getCountcomment();
+        findBoard.setCountcomment(countcomment+1);
         Comment comment = new Comment();
         comment.setBoard(findBoard);
         comment.setCommentid(commnetForm.getReplyId());
@@ -71,7 +73,10 @@ public class BoardService {
         findBoard.getCommnets().add(comment);
     }
     @Transactional
-    public void setReplyComment(Long parentid,CommentForm commentForm){
+    public void setReplyComment(Long boardId,Long parentid,CommentForm commentForm){
+        Board findBoard = boardRepository.getById(boardId);
+        int countcomment = findBoard.getCountcomment();
+        findBoard.setCountcomment(countcomment+1);
         Comment findComment = commentRepository.getById(parentid);
         Comment childComment = new Comment();
         childComment.setParent(findComment);
@@ -82,7 +87,10 @@ public class BoardService {
         commentRepository.save(childComment);
     }
     @Transactional
-    public String deleteComment(Long commentId,String password){
+    public String deleteComment(Long boardId,Long commentId,String password){
+        Board findBoard = boardRepository.getById(boardId);
+        int countcomment = findBoard.getCountcomment();
+        findBoard.setCountcomment(countcomment-1);
         Comment findComment = commentRepository.getById(commentId);
         if(findComment.getCommentpassword().equals(password)){
             commentRepository.delete(findComment);

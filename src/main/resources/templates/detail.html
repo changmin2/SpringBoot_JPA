@@ -87,8 +87,8 @@
             <div class="replay-id"  th:text="${comment.commentid}">
             </div>
             <div>
-              <button type="button" class="btn btn-secondary" th:onclick="|javascript:registerReply('${comment.id}')|" >답글</button>
-              <button type="button" class="btn btn-danger" th:onclick="|javascript:deleteReply('${comment.id}')|">삭제</button>
+              <button type="button" class="btn btn-secondary" th:onclick="|javascript:registerReply('${comment.id}','${board.id}')|" >답글</button>
+              <button type="button" class="btn btn-danger" th:onclick="|javascript:deleteReply('${comment.id}','${board.id}')|">삭제</button>
             </div>
           </div>
           <div class="replay-content" th:text="${comment.content}">
@@ -115,7 +115,7 @@
                 내용없음
               </div>
               <div>
-                <button type="button" class="btn btn-danger" th:onclick="|javascript:deleteReply('${subcomment.id}')|">삭제</button>
+                <button type="button" class="btn btn-danger" th:onclick="|javascript:deleteReply('${subcomment.id}','${board.id}')|">삭제</button>
               </div>
             </div>
             <div class="replay-content" th:text="${subcomment.content}">
@@ -158,13 +158,13 @@
       }
     });
   }
-  function registerReply(idx)
+  function registerReply(idx,boardid)
   {
-    console.log("보이루");
+
     var id = prompt("댓글작성자 아이디","");
     var password = prompt("댓글작성자 비밀번호","");
     var content = prompt("댓글내용","");
-    var CommentForm = {"id":idx,"commentid":id, "commentpassword":password,"content":content};
+    var CommentForm = {"boardid":boardid,"id":idx,"commentid":id, "commentpassword":password,"content":content};
     $.ajax({ // 컨트롤러와 통신
       type: "POST",
       data:JSON.stringify(CommentForm),
@@ -183,10 +183,10 @@
       }
     });
   }
-  function deleteReply(idx)
+  function deleteReply(idx,boardid)
   {
     var password = prompt("댓글작성자 비밀번호","");
-    var CommentForm = {"id":idx,"commentpassword":password};
+    var CommentForm = {"boardid":boardid,"id":idx,"commentpassword":password};
     $.ajax({ // 컨트롤러와 통신
       type: "POST",
       data:JSON.stringify(CommentForm),
@@ -205,8 +205,6 @@
       }
     });
   }
-
-
 </script>
 
 

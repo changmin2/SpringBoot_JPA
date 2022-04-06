@@ -164,6 +164,7 @@ public class BoardController {
     @ResponseBody
     public String replycomment(@RequestBody Map<String,String> map){
         CommentForm commentForm = new CommentForm();
+        String boardId = map.get("boardid");
         String parentid = map.get("id");
         String commentid = map.get("commentid");
         String commentpassword =  map.get("commentpassword");
@@ -171,16 +172,17 @@ public class BoardController {
         commentForm.setReplyId(commentid);
         commentForm.setReplyPassword(commentpassword);
         commentForm.setReplyContent(content);
-        boardService.setReplyComment(Long.parseLong(parentid),commentForm);
+        boardService.setReplyComment(Long.parseLong(boardId),Long.parseLong(parentid),commentForm);
         return  "success";
     }
 
     @PostMapping("/deletecomment")
     @ResponseBody
     public String deletecomment(@RequestBody Map<String,String> map){
+        String boardId = map.get("boardid");
         String commentId = map.get("id");
         String commentpassword =  map.get("commentpassword");
-        String result = boardService.deleteComment(Long.parseLong(commentId), commentpassword);
+        String result = boardService.deleteComment(Long.parseLong(boardId),Long.parseLong(commentId), commentpassword);
         return  result;
     }
 }

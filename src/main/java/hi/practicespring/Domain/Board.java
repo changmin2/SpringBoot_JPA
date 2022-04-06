@@ -28,6 +28,8 @@ public class Board {
 
     private int hit;
 
+    private int countcomment;
+
     @ManyToOne
     @JoinColumn(name="MEMBER_ID")
     private Member member;

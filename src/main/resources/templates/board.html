@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns="http://www.w3.org/1999/html">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -37,6 +38,7 @@
                 <td>
                     <a th:href="@{/detail(pageid=${writer.id})}">
                         <span th:text="${writer.title}"></span>
+                        <span th:if="${writer.countcomment}!=0" style="color: #ff0000;margin-left: 10px" th:text="'['+${writer.countcomment}+']'"></span>
                     </a>
                 </td>
                 <td th:text="${writer.updateDate}"></td>
