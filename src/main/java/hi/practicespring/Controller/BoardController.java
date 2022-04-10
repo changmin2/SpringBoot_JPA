@@ -185,4 +185,31 @@ public class BoardController {
         String result = boardService.deleteComment(Long.parseLong(boardId),Long.parseLong(commentId), commentpassword);
         return  result;
     }
+    @RequestMapping("/ncpms")
+    public String ncpms(Model model){
+        String url="http://ncpms.rda.go.kr/npmsAPI/service?apiKey=2022c2402b14214c42ba4ec44132fff7ec01&serviceCode=SVC11";
+        String sb="";
+        try{
+            HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));
+
+            String line = null;
+
+            while ((line = br.readLine()) != null) {
+                sb = sb + line + "\n";
+            }
+            System.out.println(sb);
+            br.close();
+
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        System.out.println("BoardController.ncpms"+sb);
+
+        return "/ncpms";
+    }
 }
