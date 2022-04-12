@@ -187,7 +187,7 @@ public class BoardController {
     }
     @RequestMapping("/ncpms")
     public String ncpms(Model model){
-        String url="http://ncpms.rda.go.kr/npmsAPI/service?apiKey=2022c2402b14214c42ba4ec44132fff7ec01&serviceCode=SVC11";
+        String url="http://ncpms.rda.go.kr/npmsAPI/service?apiKey=2022c2402b14214c42ba4ec44132fff7ec01&serviceCode=SVC03";
         String sb="";
         try{
             HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
