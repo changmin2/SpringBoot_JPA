@@ -1,10 +1,40 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko" xmlns="http://www.w3.org/1999/html">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, user-scalable=no,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0">
+    <title>게시판</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/bootstrap.min.css" />
 </head>
 <body>
-
+<div th:replace="/fragments/header.html :: fragment-header"></div>
+    <div class="inner">
+        <div class="pCard-container">
+            <div class="pCard-title">
+                <p>병해충 목록</p>
+                <form class="write-box d-flex"  th:action="@{/search}" id="writeForm" method="GET">
+                    <input class="form-control me-sm-2" id ="keyword" name="keyword" type="text" placeholder="병해충 검색">
+                    <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+                </form>
+            </div>
+            <ul class="pCard-list">
+                <div th:each="api : ${apiList}">
+                    <li class="pCard-item">
+                        <img th:src="${api.imgUrl}" class="class-image">
+                        <a href="">
+                            <div class="pCard-desc">
+                                <div class="pCard-desc-title" th:text="${api.name}">1</div>
+                                <div class="pCard-desc-detail" th:text="${api.bugName}"></div>
+                            </div>
+                        </a>
+                    </li>
+                </div>
+            </ul>
+        </div>
+    </div>
 </body>
+<div th:replace="/fragments/footer.html :: fragment-footer"></div>
 </html>

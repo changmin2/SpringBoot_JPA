@@ -316,7 +316,71 @@ img{
     padding-top: 3px;
     padding-bottom: 3px;
 }
-
+.ncpms-container{
+    margin-top: 100px;
+}
+.pCard {
+    width: 100%;
+    background-color: white;
+}
+.pCard-container {
+    width: 100%;
+    height: 100%;
+    margin-top: 1rem;
+}
+.pCard-title {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: black;
+}
+.pCard-list {
+    display: flex;
+    flex-flow: row wrap;
+    list-style: none;
+    padding: 1rem 0;
+    margin: 0;
+    overflow: auto;
+}
+.pCard-item {
+    width: 100%; /*이미지 너비가 커지지 않도록 ??*/
+    box-shadow: 10px 10px 10px -5px rgba(25, 42, 70, 0.2);
+    border-radius: 8px;
+    margin: 10px;
+    /*css-transition pdf 확인 마우스 커서가 위로 올라가면 애니메이션 효과*/
+    transition: 0.4s;
+    /*너비를 축소하지 않도록 ??*/
+    flex-shrink: 0;
+}
+.pCard-item:hover {
+    box-shadow: 10px 10px 10px 0px rgba(25, 42, 70, 0.2);
+    transform: translate(0, -5px);
+}
+.class-image {
+    width: 100%;
+    /*위에만 둥글하게 border-radius: 왼위 오위 오아래 왼아래 (시계방향으로 설정)*/
+    border-radius: 8px 8px 0 0;
+    height: 150px;
+    object-fit: cover;
+}
+.pCard-desc {
+    width: 100%;
+    padding: 0.8rem;
+}
+.pCard-desc-titil {
+    font-size: 0.9rem;
+    color: inherit;
+    line-height: 1.5rem;
+}
+.pCard-desc-detail {
+    font-size: 0.9rem;
+    color: inherit;
+    line-height: 1.5rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 @media only screen and (min-width: 1200px) {
     .inner {
         max-width: 1200px;
